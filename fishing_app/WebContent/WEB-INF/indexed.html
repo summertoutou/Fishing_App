@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<!-- Include meta tag to ensure proper rendering and touch zooming -->
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<!-- Include jQuery Mobile stylesheets -->
+		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+		<!-- Include the jQuery library -->
+		<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+		<!-- Include the jQuery Mobile library -->
+		<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+	</head>
+
+<body>
+	<div data-role="page" id="p1"> 
+		<div  data-role="header"><h1>Fishing</h1></div> 
+
+	    <div  data-role="content">
+	    	<div id="Logo" style="height:300px;width:400px;border:solid;align:center">
+	    		<img src="http://previews.123rf.com/images/yumi071207/yumi0712071311/yumi071207131100185/26837985-cute-little-fish-icon-vector-Stock-Vector-fish.jpg"
+	    		height=300px width=400px>
+	    	</div>
+	    	<div data-role="tabs">
+	        	<div data-role="navbar">
+	          	<ul>
+		            <li><a href="#srhbyadress" class="ui-btn-active">Search by address</a></li>
+		            <li><a href="#srhbyfish">Search by fish type</a></li>
+	         	 </ul>
+	        	</div>
+	        <div id="srhbyadress">
+	           <label for="addressSearchTB">Please Enter Address:</label>
+	           <input type="text" name="name" id="addressSearchTB" value="" data-mini="true">
+	           <div class="ui-btn ui-input-btn ui-shadow">
+				  <input type="button" data-corners="false" data-enhanced="true" value="Search" onclick="window.location='#p2';">Search</input>
+			   </div>
+	        </div>
+	        <div id="srhbyfish">
+	        	<div data-role="collapsible" data-collapsed="true">
+				    <h4>Please select fish type</h4>
+				     <form class="ui-filterable">
+		                <input id="fishDataFilter" data-type="search" placeholder="Please enter the first letter of fish type Example 'S' for Salmon">
+		            </form>
+				    <ul data-role="listview" data-filter="true" data-input="#fishDataFilter" data-inset="true" id="FTListitem">
+				    	<li data-value="Salmon" data-name="Salmon" data-filtertext="S" style="vertical-align:middle;"><a href="#p2">Salmon</a></li>
+				    	<li data-value="Bighead" data-name="Bighead" data-filtertext="B" style="vertical-align:middle;"><a href="#p2">Bighead</a></li>
+				    	<li data-value="Catfish" data-name="Catfish" data-filtertext="C" style="vertical-align:middle;"><a href="#p2">Catfish</a></li>
+				    </ul>
+				</div>
+	        </div>
+	      </div>
+	    </div> 
+	</div> 
+	
+	<div data-role="page" id="p2"> 
+		<div  data-role="header"><h1>SearchResult</h1></div> 
+
+	    <div  data-role="content">
+	    	<div id="mapapi" style="height:300px;width:400px;border:solid;align:center"></div>
+	    	
+
+	    	<ul data-role="listview" id="resListView">
+	    		<li><div style="font-weight: bold; color:blue">Position 1</div>FishType: Salmon <br> Quantity: A lot</li>
+			 	<li><div style="font-weight: bold; color:blue">Position 2</div>FishType: Salmon <br> Quantity: A lot</li>
+			  	<li><div style="font-weight: bold; color:blue">Position 3</div>FishType: Salmon <br> Quantity: A lot</li>
+			</ul>
+	    </div> 
+	</div> 
+	
+	
+	
+	
+</body>
+</html>
