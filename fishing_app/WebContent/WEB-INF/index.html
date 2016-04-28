@@ -9,6 +9,11 @@
 		<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
 		<!-- Include the jQuery Mobile library -->
 		<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+  		<link rel="stylesheet" href="https://js.arcgis.com/3.16/esri/css/esri.css">
+		<script src="https://js.arcgis.com/3.16/"></script>	  
+		
+		
+		<script type="text/javascript"></script>
 	</head>
 
 <body>
@@ -31,7 +36,7 @@
 	           <label for="addressSearchTB">Please Enter Address:</label>
 	           <input type="text" name="name" id="addressSearchTB" value="" data-mini="true">
 	           <div class="ui-btn ui-input-btn ui-shadow">
-				  <input type="button" data-corners="false" data-enhanced="true" value="Search" onclick="window.location='#p2';">Search</input>
+				  <input type="button" data-corners="false" data-enhanced="true" value="Search" onclick="window.location='#p2';">Search
 			   </div>
 	        </div>
 	        <div id="srhbyfish">
@@ -48,14 +53,15 @@
 				</div>
 	        </div>
 	      </div>
-	    </div> 
+	    </div>  
 	</div> 
 	
 	<div data-role="page" id="p2"> 
 		<div  data-role="header"><h1>SearchResult</h1></div> 
 
 	    <div  data-role="content">
-	    	<div id="mapapi" style="height:300px;width:400px;border:solid;align:center"></div>
+	    	<div id="mapapi" style="height:300px;width:400px;border:solid;align:center">	
+	    	</div>
 	    	
 
 	    	<ul data-role="listview" id="resListView">
@@ -66,7 +72,18 @@
 	    </div> 
 	</div> 
 	
-	
+	  			<script> 
+	    		var map;
+	    		require(["esri/map", "dojo/domReady!"], function(Map) {
+	    		  map = new Map("mapapi", {
+	    		    center: [-121.881887,37.336535 ],
+	    		    zoom: 3,
+	    		    basemap: "streets",
+	    		    <!--the map automatically resizes if the browser window or ContentPane widget enclosing the map is resized.     -->
+	    		    autoResize: TRUE   
+	    		  });
+	    		});	
+	    		</script>    
 	
 	
 </body>
