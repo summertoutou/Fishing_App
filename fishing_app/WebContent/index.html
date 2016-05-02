@@ -11,12 +11,65 @@
 		<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
   		<link rel="stylesheet" href="https://js.arcgis.com/3.16/esri/css/esri.css">
 		<script src="https://js.arcgis.com/3.16/"></script>	  
+		<script> 
+	    		var map;
+	    		require(["esri/map", "dojo/domReady!"], function(Map) {
+	    		  map = new Map("mapapi", {
+	    		    center: [-121.881887,37.336535 ],
+	    		    zoom: 3,
+	    		    basemap: "streets", 
+	    		    //the map automatically resizes if the browser window or ContentPane widget enclosing the map is resized.
+	    		    autoResize: true
+	    		  });
+	    		});	
+	    </script> 
 		
+		<script type="text/javascript">
+ 	    $(document).on("pageinit", "#p1", function( event ) {
+	    	$.ajax({
+	            url: "getSpecies.jsp",
+	            beforeSend: function() {  $.mobile.loading('show'); $("#overlayblock").show();}, //Show spinner
+	            complete: function() {  $.mobile.loading('hide'); $("#overlayblock").hide();}, //Hide spinner
+	            success: function(data) {
+	            	$("#FTListitem").empty();
+	            	$("#FTListitem").append(data).listview('refresh');
+	            	$("#FTListitem").listview("refresh");            
+	            }
+	        });  
+	    });
+
+ 	   $(document).on("click", "#FTListitem li", function( event ) {
+ 		   var fishType=this.getAttribute('data-value');
+ 		   $.ajax({
+ 			   url: "searchByFishType.jsp",
+	           data:{fishType:fishType},
+	           beforeSend: function() {  $.mobile.loading('show'); $("#overlayblock").show();}, //Show spinner
+	           complete: function() {  $.mobile.loading('hide'); $("#overlayblock").hide();}, //Hide spinner
+	           success: function(data) {
+	        	   $("#resListView").empty();
+	        	   $("#resListView").append(data).listview('refresh');
+	        	   $("#resListView").listview("refresh");    
+	           }
+	    	});   
+ 		});
+		</script>
 		
-		<script type="text/javascript"></script>
+		<style>
+			#overlayblock {
+			    background-color: rgba(0, 0, 0, 0.8);
+			    z-index: 9999;
+			    position: fixed;
+			    left: 0;
+			    top: 0;
+			    width: 100%;
+			    height: 200%;
+			    display: none;
+			}
+		</style>
 	</head>
 
 <body>
+	<div id="overlayblock"></div>
 	<div data-role="page" id="p1"> 
 		<div  data-role="header"><h1>Fishing</h1></div> 
 
@@ -46,9 +99,6 @@
 		                <input id="fishDataFilter" data-type="search" placeholder="Please enter the first letter of fish type Example 'S' for Salmon">
 		            </form>
 				    <ul data-role="listview" data-filter="true" data-input="#fishDataFilter" data-inset="true" id="FTListitem">
-				    	<li data-value="Salmon" data-name="Salmon" data-filtertext="S" style="vertical-align:middle;"><a href="#p2">Salmon</a></li>
-				    	<li data-value="Bighead" data-name="Bighead" data-filtertext="B" style="vertical-align:middle;"><a href="#p2">Bighead</a></li>
-				    	<li data-value="Catfish" data-name="Catfish" data-filtertext="C" style="vertical-align:middle;"><a href="#p2">Catfish</a></li>
 				    </ul>
 				</div>
 	        </div>
@@ -65,25 +115,11 @@
 	    	
 
 	    	<ul data-role="listview" id="resListView">
-	    		<li><div style="font-weight: bold; color:blue">Position 1</div>FishType: Salmon <br> Quantity: A lot</li>
-			 	<li><div style="font-weight: bold; color:blue">Position 2</div>FishType: Salmon <br> Quantity: A lot</li>
-			  	<li><div style="font-weight: bold; color:blue">Position 3</div>FishType: Salmon <br> Quantity: A lot</li>
+
 			</ul>
 	    </div> 
 	</div> 
-	
-	  			<script> 
-	    		var map;
-	    		require(["esri/map", "dojo/domReady!"], function(Map) {
-	    		  map = new Map("mapapi", {
-	    		    center: [-121.881887,37.336535 ],
-	    		    zoom: 3,
-	    		    basemap: "streets",
-	    		    <!--the map automatically resizes if the browser window or ContentPane widget enclosing the map is resized.     -->
-	    		    autoResize: TRUE   
-	    		  });
-	    		});	
-	    		</script>    
+   
 	
 	
 </body>
