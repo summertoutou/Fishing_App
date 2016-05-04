@@ -10,7 +10,7 @@ String connectionURL = "jdbc:mysql://127.0.0.1:3306";
 Connection conn = null; 
 
 try{
-	String fishType = request.getParameter("fishType").toString();
+	String fishType = request.getParameter("fishTypeN").toString();
 	Class.forName("com.mysql.jdbc.Driver").newInstance(); 
 	conn = DriverManager.getConnection(connectionURL, db_usr, db_psw);
 	Statement state = conn.createStatement();

@@ -15,11 +15,11 @@
 	    		var map;
 	    		require(["esri/map", "dojo/domReady!"], function(Map) {
 	    		  map = new Map("mapapi", {
-	    		    center: [-121.881887,37.336535 ],
-	    		    zoom: 3,
+	    		    center: [-121.881887,37.336535 ],  //SJSU coordinates
+	    		    zoom: 8,   //zoom to the bay are
 	    		    basemap: "streets", 
 	    		    //the map automatically resizes if the browser window or ContentPane widget enclosing the map is resized.
-	    		    autoResize: true
+	    		    autoResize: true     //auto size based on the window size
 	    		  });
 	    		});	
 	    </script> 
@@ -42,7 +42,7 @@
  		   var fishType=this.getAttribute('data-value');
  		   $.ajax({
  			   url: "searchByFishType.jsp",
-	           data:{fishType:fishType},
+	           data:{fishTypeN:fishType},
 	           beforeSend: function() {  $.mobile.loading('show'); $("#overlayblock").show();}, //Show spinner
 	           complete: function() {  $.mobile.loading('hide'); $("#overlayblock").hide();}, //Hide spinner
 	           success: function(data) {
@@ -99,6 +99,7 @@
 		                <input id="fishDataFilter" data-type="search" placeholder="Please enter the first letter of fish type Example 'S' for Salmon">
 		            </form>
 				    <ul data-role="listview" data-filter="true" data-input="#fishDataFilter" data-inset="true" id="FTListitem">
+				   
 				    </ul>
 				</div>
 	        </div>
