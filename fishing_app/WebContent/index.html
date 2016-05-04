@@ -10,17 +10,83 @@
 		<!-- Include the jQuery Mobile library -->
 		<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
   		<link rel="stylesheet" href="https://js.arcgis.com/3.16/esri/css/esri.css">
+		<!-- ArcGIS API for JavaScript library references -->
 		<script src="https://js.arcgis.com/3.16/"></script>	  
+
 		<script> 
 	    		var map;
-	    		require(["esri/map", "dojo/domReady!"], function(Map) {
-	    		  map = new Map("mapapi", {
+	    		require(["esri/map", 
+	    		         "esri/InfoTemplate", 
+	    		         "esri/geometry/Point", 
+	    		         "esri/graphic", 
+	    		         "esri/symbols/PictureMarkerSymbol", 
+	    		         "dojo/on", 
+	    		         "dojo/dom", 
+	    		         "dojo/domReady!"] , function(Map, InfoTemplate, Point, Graphic, PictureMarkerSymbol, on, dom) {
+	    			"use strict" //cannot use undeclared var
+	    			//create map
+	    			map = new Map("mapDiv", {
 	    		    center: [-121.881887,37.336535 ],  //SJSU coordinates
 	    		    zoom: 8,   //zoom to the bay are
 	    		    basemap: "streets", 
 	    		    //the map automatically resizes if the browser window or ContentPane widget enclosing the map is resized.
 	    		    autoResize: true     //auto size based on the window size
 	    		  });
+	    			//set popup
+	    	        var popup = map.infoWindow;
+	    	        popup.highlight = false;
+	    	        popup.titleInBody = false;
+	    	        //get symbol
+	    	        var symbol = new createPictureSymbol("http://icon-park.com/imagefiles/location_map_pin_blue5.png",0,12,14,16);
+	    	        // Wire events
+	    	        on(dom.byId("btnGeolocation"),"click",showGeolocation);
+	    	        on(dom.byId("btnClear"), "click", clearGeolocationGraphics);
+	    	        //show current location
+	    	        function showGeolocation() {
+	    	            if (navigator.geolocation){
+	    	              navigator.geolocation.getCurrentPosition(showLocation, errorHandler);
+	    	              utils.setStyle("progress", "progress");
+	    	            } else {
+	    	              alert("Sorry, your browser doesn't support geolocation.");      
+	    	            }
+	    	          }
+	    	        function showLocation(position) {
+	    	            // Create a point
+	    	            var pt = new Point(position.coords.longitude,position.coords.latitude);
+	    	            // Create a symbol and pop-up template and add the graphic to the map
+	    	            var attributes = {"lat":pt.y.toFixed(2),"lon":pt.x.toFixed(2)};
+	    	            var infoTemplate = new InfoTemplate("Your Location","Latitude: ${lat} <br/>Longitude: ${lon}");
+	    	            var graphic = new Graphic(pt,symbol,attributes,infoTemplate);
+	    	            map.graphics.add(graphic);
+	    	            // Position the map
+	    	            map.centerAndZoom(pt,13);
+	    	            utils.setStyle("progress", "progress hidden");
+	    	          }
+	    	        function errorHandler(err) {
+	    	            utils.setStyle("progress", "progress hidden");
+	    	            if(err.code == 1) {
+	    	              alert("Error: Access is denied!");
+	    	            } else if ( err.code == 2) {
+	    	              alert("Error: Position is unavailable!");
+	    	            } else 
+	    	              alert("Error: " + err);
+	    	          }
+	    	   
+	    	          function clearGeolocationGraphics() {
+	    	            map.infoWindow.hide();
+	    	            map.graphics.clear();       
+	    	          }
+
+	    	          function createPictureSymbol(url, xOffset, yOffset, xWidth, yHeight) {
+	    	            return new PictureMarkerSymbol(
+	    	            {
+	    	              "angle": 0,
+	    	              "xoffset": xOffset, "yoffset": yOffset, "type": "esriPMS",
+	    	              "url": url,  
+	    	              "contentType": "image/png",
+	    	              "width":xWidth, "height": yHeight
+	    	            });
+	    	          }
 	    		});	
 	    </script> 
 		
@@ -109,19 +175,22 @@
 	
 	<div data-role="page" id="p2"> 
 		<div  data-role="header"><h1>SearchResult</h1></div> 
-
 	    <div  data-role="content">
-	    	<div id="mapapi" style="height:300px;width:400px;border:solid;align:center">	
+	    
+      			<button id="btnGeolocation" class="btn_success">Go</button>
+
+      			<button id="btnClear" class="btn_default">Clear</button>
+    		
+	    	<div id="mapDiv" style="height:400px;width:400px;border:solid;align:center">	
 	    	</div>
 	    	
-
 	    	<ul data-role="listview" id="resListView">
 
 			</ul>
 	    </div> 
 	</div> 
    
-	
+	      	
 	
 </body>
 </html>
