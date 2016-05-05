@@ -177,13 +177,17 @@
 		<div  data-role="header"><h1>SearchResult</h1></div> 
 	    <div  data-role="content">
 	    
-      			<button id="btnGeolocation" class="btn_success">Go</button>
-
-      			<button id="btnClear" class="btn_default">Clear</button>
-    		
 	    	<div id="mapDiv" style="height:400px;width:400px;border:solid;align:center">	
 	    	</div>
 	    	
+	        <div class="ui-btn ui-input-btn ui-shadow ui-corner-all ui-btn-inline">
+				  <input type="button" data-corners="false" data-enhanced="true" id="btnGeolocation">Pin
+			</div>	
+			    
+			<div class="ui-btn ui-input-btn ui-shadow ui-corner-all ui-btn-inline">
+				  <input type="button" data-corners="false" data-enhanced="true" id="btnClear"> Clear
+			</div>  
+				    	
 	    	<ul data-role="listview" id="resListView">
 
 			</ul>
