@@ -79,7 +79,7 @@
 						var test_symbol = new createPictureSymbol("https://raw.githubusercontent.com/Esri/solutions-symbology-data/master/symbology/web/png/Fishing-Site.png",0,12,14,16);          
 						var test_attr = {"lat":test_point.y.toFixed(2),"lon":test_point.x.toFixed(2)};
 						var info = new InfoTemplate("Your Location","Latitude: ${lat} <br/>Longitude: ${lon}");   
-						var test_graphic = new Graphic(test_point,test_symbol);
+						var test_graphic = new Graphic(test_point,test_symbol,test_attr,info);
 						map.graphics.add(test_graphic);
 						map.centerAndZoom(test_point,13);
 					});						
