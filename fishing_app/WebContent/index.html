@@ -45,13 +45,13 @@
 					   });
 					define the info template that is used to display the popup content.
 					var template = new InfoTemplate();
-					template.setTitle("<b>${Water_Area}<\/b>");  //change parameter <b> you shen me yong
+					template.setTitle("<b>${Water_Area}<\/b>");  //change parameter 
 					template.setContent("County:"${Release_county} );
 					template.setContent(  
 							
 					  //create the feature layer (street trees of San Francisco)
-					  var featureLayer = new FeatureLayer("https://services.arcgis.com/V6ZHFr6zdgNZuVG0/arcgis/rest/services/Street_Trees/FeatureServer/0",{
-						infoTemplate: template,
+					  var Fish_Point = new FeatureLayer("https://services.arcgis.com/V6ZHFr6zdgNZuVG0/arcgis/rest/services/Street_Trees/FeatureServer/0",{
+			 			infoTemplate: template,
 						outFields: ["*"]
 					  });
 					  map.addLayer(featureLayer);
@@ -162,9 +162,9 @@
 	           beforeSend: function() {  $.mobile.loading('show'); $("#overlayblock").show();}, //Show spinner
 	           complete: function() {  $.mobile.loading('hide'); $("#overlayblock").hide();}, //Hide spinner
 	           success: function(data) {
-	        	   $("#resListView").empty();
+/* 	        	   $("#resListView").empty();
 	        	   $("#resListView").append(data).listview('refresh');
-	        	   $("#resListView").listview("refresh");    
+	        	   $("#resListView").listview("refresh");     */
 	           }
 	    	});   
  		});
@@ -190,9 +190,9 @@
 		<div  data-role="header"><h1>Fishing</h1></div> 
 
 	    <div  data-role="content">
-	    	<div id="Logo" style="height:300px;width:400px;border:solid;align:center">
+	    	<div id="Logo" style="max-height:300px;max-width:400px;border:solid;align:center">
 	    		<img src="http://previews.123rf.com/images/yumi071207/yumi0712071311/yumi071207131100185/26837985-cute-little-fish-icon-vector-Stock-Vector-fish.jpg"
-	    		height=300px width=400px>
+	    		style="max-height:300px; max-width:400px;">
 	    	</div>
 	    	<div data-role="tabs">
 	        	<div data-role="navbar">
@@ -227,7 +227,7 @@
 		<div  data-role="header"><h1>SearchResult</h1></div> 
 	    <div  data-role="content">
 	    
-	    	<div id="mapDiv" style="height:400px;width:400px;border:solid;align:center">	
+	    	<div id="mapDiv" style="max-height:400px;max-width:400px;border:solid;align:center">	
 	    	</div>
 	    	
 	        <div class="ui-btn ui-input-btn ui-shadow ui-corner-all ui-btn-inline">
