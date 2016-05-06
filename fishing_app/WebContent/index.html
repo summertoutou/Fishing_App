@@ -16,13 +16,18 @@
 		<script> 
 	    		var map;
 	    		require(["esri/map", 
-	    		         "esri/InfoTemplate", 
+						 "esri/layers/FeatureLayer", 
+						 "esri/tasks/query",
+	    		         "esri/InfoTemplate",
+						 "esri/dijit/InfoWindow",
+						 "dojo/dom-construct",
+						 "dojo/string",
 	    		         "esri/geometry/Point", 
 	    		         "esri/graphic", 
 	    		         "esri/symbols/PictureMarkerSymbol", 
 	    		         "dojo/on", 
 	    		         "dojo/dom", 
-	    		         "dojo/domReady!"] , function(Map, InfoTemplate, Point, Graphic, PictureMarkerSymbol, on, dom) {
+	    		         "dojo/domReady!"] , function(Map, FeatureLayer, Query, InfoTemplate, InfoWindow, domConstruct, string, Point, Graphic, PictureMarkerSymbol, on, dom) {
 	    			"use strict" //cannot use undeclared var
 	    			//create map
 	    			map = new Map("mapDiv", {
@@ -32,6 +37,53 @@
 	    		    //the map automatically resizes if the browser window or ContentPane widget enclosing the map is resized.
 	    		    autoResize: true     //auto size based on the window size
 	    		  });
+	    			
+	    			/*  
+					//create the custom info window specifying any input options
+					var infoWindow = new  InfoWindow({
+						  domNode: domConstruct.create("div", null, dom.byId("mapDiv"))
+					   });
+					define the info template that is used to display the popup content.
+					var template = new InfoTemplate();
+					template.setTitle("<b>${Water_Area}<\/b>");  //change parameter <b> you shen me yong
+					template.setContent("County:"${Release_county} );
+					template.setContent(  
+							
+					  //create the feature layer (street trees of San Francisco)
+					  var featureLayer = new FeatureLayer("https://services.arcgis.com/V6ZHFr6zdgNZuVG0/arcgis/rest/services/Street_Trees/FeatureServer/0",{
+						infoTemplate: template,
+						outFields: ["*"]
+					  });
+					  map.addLayer(featureLayer);
+
+					  //resize the info window
+					  map.infoWindow.resize(180, 75);
+
+
+					  function getTextContent(graphic){
+						var attr = graphic.attributes.qSpecies.replace('"',"");
+						var names=attr.split("::");
+						var commName = string.trim(names[1].replace('"',""));
+						var hlink = names[0].split(" ");
+						var sciName = hlink[0] + "_" + hlink[1];
+						if(commName === ""){
+						  commName = names[0];
+						}
+						return "<b>" + commName + "<\/b><br /><a target='_blank' href=https://en.wikipedia.org/wiki/" + sciName  +">Wikipedia Entry<\/a>";
+					  }     
+							
+					  */			
+	 
+					map.on("load", function (){
+						var test_point = new Point([-122.9572,37.2995]); // test point
+						var test_symbol = new createPictureSymbol("https://raw.githubusercontent.com/Esri/solutions-symbology-data/master/symbology/web/png/Fishing-Site.png",0,12,14,16);          
+						var test_attr = {"lat":test_point.y.toFixed(2),"lon":test_point.x.toFixed(2)};
+						var info = new InfoTemplate("Your Location","Latitude: ${lat} <br/>Longitude: ${lon}");   
+						var test_graphic = new Graphic(test_point,test_symbol);
+						map.graphics.add(test_graphic);
+						map.centerAndZoom(test_point,13);
+					});						
+							
 	    			//set popup
 	    	        var popup = map.infoWindow;
 	    	        popup.highlight = false;
@@ -54,9 +106,9 @@
 	    	            // Create a point
 	    	            var pt = new Point(position.coords.longitude,position.coords.latitude);
 	    	            // Create a symbol and pop-up template and add the graphic to the map
-	    	            var attributes = {"lat":pt.y.toFixed(2),"lon":pt.x.toFixed(2)};
-	    	            var infoTemplate = new InfoTemplate("Your Location","Latitude: ${lat} <br/>Longitude: ${lon}");
-	    	            var graphic = new Graphic(pt,symbol,attributes,infoTemplate);
+	    	      //      var attributes = {"lat":pt.y.toFixed(2),"lon":pt.x.toFixed(2)};
+	    	      //      var infoTemplate = new InfoTemplate("Your Location","Latitude: ${lat} <br/>Longitude: ${lon}");
+	    	            var graphic = new Graphic(pt,symbol);
 	    	            map.graphics.add(graphic);
 	    	            // Position the map
 	    	            map.centerAndZoom(pt,13);
@@ -76,7 +128,6 @@
 	    	            map.infoWindow.hide();
 	    	            map.graphics.clear();       
 	    	          }
-
 	    	          function createPictureSymbol(url, xOffset, yOffset, xWidth, yHeight) {
 	    	            return new PictureMarkerSymbol(
 	    	            {
