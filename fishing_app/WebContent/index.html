@@ -76,14 +76,20 @@
 	 
 					map.on("load", function (){
 						var test_point = new Point([-122.9572,37.2995]); // test point
+						var test_point2= new Point([-122.9573,37.2996]); 
 						var test_symbol = new createPictureSymbol("https://raw.githubusercontent.com/Esri/solutions-symbology-data/master/symbology/web/png/Fishing-Site.png",0,12,14,16);          
-						var test_attr = {"lat":test_point.y.toFixed(2),"lon":test_point.x.toFixed(2)};
+						var test_attr = {"lat":test_point.y.toFixed(4),"lon":test_point.x.toFixed(4)};
+						var test_attr2 = {"lat":test_point2.y.toFixed(4),"lon":test_point2.x.toFixed(4)};
 						var info = new InfoTemplate("Your Location","Latitude: ${lat} <br/>Longitude: ${lon}");   
 						var test_graphic = new Graphic(test_point,test_symbol,test_attr,info);
+						var test_graphic2 = new Graphic(test_point2,test_symbol,test_attr2,info);
+						map.graphics.add(test_graphic);
 						map.graphics.add(test_graphic);
 						map.centerAndZoom(test_point,13);
 					});						
-							
+					
+					  
+					  
 	    			//set popup
 	    	        var popup = map.infoWindow;
 	    	        popup.highlight = false;
