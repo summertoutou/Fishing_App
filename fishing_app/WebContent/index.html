@@ -15,7 +15,7 @@
 
 		<script> 
 	    		var map;
-	    		require(["esri/map", 
+	    		/* require(["esri/map", 
 						 "esri/layers/FeatureLayer", 
 						 "esri/tasks/query",
 	    		         "esri/InfoTemplate",
@@ -72,10 +72,11 @@
 						return "<b>" + commName + "<\/b><br /><a target='_blank' href=https://en.wikipedia.org/wiki/" + sciName  +">Wikipedia Entry<\/a>";
 					  }     
 							
-					  */			
+					  		
 	 
 					map.on("load", function (){
-						var test_point = new Point([-122.9572,37.2995]); // test point
+						
+ 						var test_point = new Point([-122.9572,37.2995]); // test point
 						var test_point2= new Point([-122.9573,37.2996]); 
 						var test_symbol = new createPictureSymbol("https://raw.githubusercontent.com/Esri/solutions-symbology-data/master/symbology/web/png/Fishing-Site.png",0,12,14,16);          
 						var test_attr = {"lat":test_point.y.toFixed(4),"lon":test_point.x.toFixed(4)};
@@ -84,8 +85,8 @@
 						var test_graphic = new Graphic(test_point,test_symbol,test_attr,info);
 						var test_graphic2 = new Graphic(test_point2,test_symbol,test_attr2,info);
 						map.graphics.add(test_graphic);
-						map.graphics.add(test_graphic);
-						map.centerAndZoom(test_point,13);
+						map.graphics.add(test_graphic2);
+						map.centerAndZoom(test_point,13); 
 					});						
 					
 					  
@@ -144,11 +145,12 @@
 	    	              "width":xWidth, "height": yHeight
 	    	            });
 	    	          }
-	    		});	
+	    		});	 */
 	    </script> 
 		
 		<script type="text/javascript">
  	    $(document).on("pageinit", "#p1", function( event ) {
+ 	    	localStorage.clear();
 	    	$.ajax({
 	            url: "getSpecies.jsp",
 	            beforeSend: function() {  $.mobile.loading('show'); $("#overlayblock").show();}, //Show spinner
@@ -168,9 +170,115 @@
 	           beforeSend: function() {  $.mobile.loading('show'); $("#overlayblock").show();}, //Show spinner
 	           complete: function() {  $.mobile.loading('hide'); $("#overlayblock").hide();}, //Hide spinner
 	           success: function(data) {
-/* 	        	   $("#resListView").empty();
-	        	   $("#resListView").append(data).listview('refresh');
-	        	   $("#resListView").listview("refresh");     */
+	        	   require(["esri/map", 
+							 "esri/layers/FeatureLayer", 
+							 "esri/tasks/query",
+		    		         "esri/InfoTemplate",
+							 "esri/dijit/InfoWindow",
+							 "dojo/dom-construct",
+							 "dojo/string",
+		    		         "esri/geometry/Point", 
+		    		         "esri/graphic", 
+		    		         "esri/symbols/PictureMarkerSymbol", 
+		    		         "dojo/on", 
+		    		         "dojo/dom", 
+		    		         "dojo/domReady!"] , function(Map, FeatureLayer, Query, InfoTemplate, InfoWindow, domConstruct, string, Point, Graphic, PictureMarkerSymbol, on, dom) {
+		    			"use strict" //cannot use undeclared var
+		    			//create map
+		    			map = new Map("mapDiv", {
+		    		    center: [-121.881887,37.336535 ],  //SJSU coordinates
+		    		    zoom: 8,   //zoom to the bay are
+		    		    basemap: "streets", 
+		    		    //the map automatically resizes if the browser window or ContentPane widget enclosing the map is resized.
+		    		    autoResize: true     //auto size based on the window size
+		    		  });
+		    			
+						map.on("load", function (){
+							var obj = JSON.parse(data);
+							var fishData = obj.result;
+							var sumLat=0,sumLon=0;
+							var dataSize = fishData.length;
+							var pointInfo = new InfoTemplate("Fish Point",
+							"Release County:${county}<br/>Release Water:${water}<br/>Season:${season}<br/>");
+							var pointSymbol = new createPictureSymbol("https://raw.githubusercontent.com/Esri/solutions-symbology-data/master/symbology/web/png/Fishing-Site.png",0,12,14,16);          
+							for(var i=0; i<dataSize;i++){
+								var fishLat = Number(Number(fishData[i].lat).toFixed(4));
+								var fishLon = Number(Number(fishData[i].lon).toFixed(4));	
+								sumLat = sumLat + fishLat;
+								sumLon = sumLon + fishLon;
+								var fishPoint = new Point([fishLon,fishLat]);
+								var pointAttr = {"lat":fishPoint.x,"lon":fishPoint.y,"county":fishData[i].County,
+												 "water":fishData[i].Water,"season":fishData[i].Season};
+								var pointGraphic = new Graphic(fishPoint,pointSymbol,pointAttr,pointInfo);
+								map.graphics.add(pointGraphic);
+								 
+							}
+							var avgLat = Number(sumLat/dataSize).toFixed(4);
+							var avgLon = Number(sumLon/dataSize).toFixed(4);
+							var centerPoint = new Point([Number(avgLon),Number(avgLat)]); 
+							var fake_center = new Point(-121.881887,37.336535);
+							map.centerAndZoom(fake_center,6);
+						
+							
+						});						
+						
+						  
+						  
+		    			//set popup
+		    	        var popup = map.infoWindow;
+		    	        popup.highlight = false;
+		    	        popup.titleInBody = false;
+		    	        //get symbol
+		    	        var symbol = new createPictureSymbol("http://icon-park.com/imagefiles/location_map_pin_blue5.png",0,12,14,16);
+		    	        // Wire events
+		    	        on(dom.byId("btnGeolocation"),"click",showGeolocation);
+		    	        on(dom.byId("btnClear"), "click", clearGeolocationGraphics);
+		    	        //show current location
+		    	        function showGeolocation() {
+		    	            if (navigator.geolocation){
+		    	              navigator.geolocation.getCurrentPosition(showLocation, errorHandler);
+		    	              utils.setStyle("progress", "progress");
+		    	            } else {
+		    	              alert("Sorry, your browser doesn't support geolocation.");      
+		    	            }
+		    	          }
+		    	        function showLocation(position) {
+		    	            // Create a point
+		    	            var pt = new Point(position.coords.longitude,position.coords.latitude);
+		    	            // Create a symbol and pop-up template and add the graphic to the map
+		    	      //      var attributes = {"lat":pt.y.toFixed(2),"lon":pt.x.toFixed(2)};
+		    	      //      var infoTemplate = new InfoTemplate("Your Location","Latitude: ${lat} <br/>Longitude: ${lon}");
+		    	            var graphic = new Graphic(pt,symbol);
+		    	            map.graphics.add(graphic);
+		    	            // Position the map
+		    	            map.centerAndZoom(pt,13);
+		    	            utils.setStyle("progress", "progress hidden");
+		    	          }
+		    	        function errorHandler(err) {
+		    	            utils.setStyle("progress", "progress hidden");
+		    	            if(err.code == 1) {
+		    	              alert("Error: Access is denied!");
+		    	            } else if ( err.code == 2) {
+		    	              alert("Error: Position is unavailable!");
+		    	            } else 
+		    	              alert("Error: " + err);
+		    	          }
+		    	   
+		    	          function clearGeolocationGraphics() {
+		    	            map.infoWindow.hide();
+		    	            map.graphics.clear();       
+		    	          }
+		    	          function createPictureSymbol(url, xOffset, yOffset, xWidth, yHeight) {
+		    	            return new PictureMarkerSymbol(
+		    	            {
+		    	              "angle": 0,
+		    	              "xoffset": xOffset, "yoffset": yOffset, "type": "esriPMS",
+		    	              "url": url,  
+		    	              "contentType": "image/png",
+		    	              "width":xWidth, "height": yHeight
+		    	            });
+		    	          }
+		    		});	
 	           }
 	    	});   
  		});

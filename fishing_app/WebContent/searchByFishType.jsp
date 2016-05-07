@@ -18,17 +18,21 @@ try{
 		"SELECT * FROM fishingDB.final_with_full_name WHERE species='"+fishType+"'";
 	
 	ResultSet rset_oi = state.executeQuery(sql_orderinfo);
-	int counter = 1;
+	boolean isfirsttime = true;
 	while(rset_oi.next()){
+		if(isfirsttime){
+			isfirsttime = false;
+			%>{"result":[<%
+		} else {
+			%>,<%
+		}
 	%>
-<li><div style="font-weight: bold; color:blue">Position <%=counter++%></div>
-Release County: <%=rset_oi.getString(1)%> <br> 
-Release Water: <%=rset_oi.getString(2) %> <br>
-Species:<%=rset_oi.getString(3)%> <br>
-Season:<%=rset_oi.getString(4)%> 
-</li>
+{"County":"<%=rset_oi.getString(1)%>", "Water":"<%=rset_oi.getString(2)%>",
+"Species":"<%=rset_oi.getString(3)%>", "Season":"<%=rset_oi.getString(4)%>",
+"lat":"<%=rset_oi.getString(5)%>", "lon":"<%=rset_oi.getString(6)%>"}
 	<%
 	}
+	%>]}<%
 } catch(Exception e){
 	e.printStackTrace();	
 } finally {
