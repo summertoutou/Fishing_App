@@ -8,7 +8,6 @@ String db_psw = "zsh123456";
 String connectionURL = "jdbc:mysql://127.0.0.1:3306";
 Connection conn = null; 
 try{
-<<<<<<< HEAD
     String fishType = request.getParameter("fishTypeN").toString();
     Class.forName("com.mysql.jdbc.Driver").newInstance(); 
     conn = DriverManager.getConnection(connectionURL, db_usr, db_psw);
@@ -32,31 +31,6 @@ try{
     <%
     }
     %>]}<%
-=======
-	String fishType = request.getParameter("fishTypeN").toString();
-	Class.forName("com.mysql.jdbc.Driver").newInstance(); 
-	conn = DriverManager.getConnection(connectionURL, db_usr, db_psw);
-	Statement state = conn.createStatement();
-	String sql_orderinfo = 
-		"SELECT * FROM fishingDB.final_with_full_name WHERE species='"+fishType+"'";
-	
-	ResultSet rset_oi = state.executeQuery(sql_orderinfo);
-	boolean isfirsttime = true;
-	while(rset_oi.next()){
-		if(isfirsttime){
-			isfirsttime = false;
-			%>{"result":[<%
-		} else {
-			%>,<%
-		}
-	%>
-{"County":"<%=rset_oi.getString(1)%>", "Water":"<%=rset_oi.getString(2)%>",
-"Species":"<%=rset_oi.getString(3)%>", "Season":"<%=rset_oi.getString(4)%>",
-"lat":"<%=rset_oi.getString(5)%>", "lon":"<%=rset_oi.getString(6)%>"}
-	<%
-	}
-	%>]}<%
->>>>>>> origin/master
 } catch(Exception e){
     e.printStackTrace();    
 } finally {
