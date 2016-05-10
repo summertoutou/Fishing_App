@@ -282,8 +282,26 @@
 	           }
 	    	});   
  		});
-		</script>
 		
+		
+	/*	$(document).on("click", "#submit", function( event ) {
+          $.ajax({
+        	  var street = this.getAttribute('street');
+              url: "getAddress.jsp",
+              data:{addresses:street},
+              beforeSend: function() {  $.mobile.loading('show'); $("#overlayblock").show();}, //Show spinner
+              complete: function() {  $.mobile.loading('hide'); $("#overlayblock").hide();}, //Hide spinner
+              success: function(data) {
+            	  alert("success");
+                  $("#resListView").empty();
+                  $("#resListView").append(data).listview('refresh');
+                  $("#resListView").listview("refresh");     
+              }
+           });   
+        });
+		*/
+        </script>
+          
 		<style>
 			#overlayblock {
 			    background-color: rgba(0, 0, 0, 0.8);
@@ -317,10 +335,25 @@
 	        	</div>
 	        <div id="srhbyadress">
 	           <label for="addressSearchTB">Please Enter Address:</label>
-	           <input type="text" name="name" id="addressSearchTB" value="" data-mini="true">
-	           <div class="ui-btn ui-input-btn ui-shadow">
+	           <input type="text" name="street" id="street" value="" data-mini="true" placeholder="Street">
+	           <input type="text" name="city" id="city" value="" data-mini="true" placeholder="city">
+	           <input type="text" name="state" id="state" value="" data-mini="true" placeholder="state">
+               <input type="text" name="zipcode" id="zipcode" value="" data-mini="true" placeholder="zipcode">
+               
+	           <p></p> 
+	   <!--    <form action="checkInput.jsp" method="POST">
+	           <input type="text" name="street" id="street" value="" data-mini="true" placeholder="Street">
+               <input type="text" name="city" id="city" value="" data-mini="true" placeholder="city">
+               <input type="text" name="state" id="state" value="" data-mini="true" placeholder="state">
+               <input type="text" name="zipcode" id="zipcode" value="" data-mini="true" placeholder="zipcode">	                          
+               <div class="ui-btn ui-input-btn ui-shadow">
+                  <input type="submit" data-corners="false" data-enhanced="true" value="Search">Search
+               </div>
+               </form>
+              -->  
+	            <div class="ui-btn ui-input-btn ui-shadow">
 				  <input type="button" data-corners="false" data-enhanced="true" value="Search" onclick="window.location='#p2';">Search
-			   </div>
+			   </div>  
 	        </div>
 	        <div id="srhbyfish">
 	        	<div data-role="collapsible" data-collapsed="true">
