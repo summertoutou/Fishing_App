@@ -167,7 +167,7 @@
                beforeSend: function() {  $.mobile.loading('show'); $("#overlayblock").show();}, //Show spinner
                complete: function() {  $.mobile.loading('hide'); $("#overlayblock").hide();}, //Hide spinner
                success: function(data) {
-            	   alert(data);
+            	   //alert(data);
                    require(["esri/map", 
                              "esri/layers/FeatureLayer", 
                              "esri/tasks/query",
@@ -341,8 +341,8 @@
                                 map.graphics.add(pointGraphic);
                                  
                             }
-                            var avgLat = Number(sumLat/dataSize).toFixed(4);
-                            var avgLon = Number(sumLon/dataSize).toFixed(4);
+                            var avgLat = Number(sumLat/dataSize).toFixed(9);
+                            var avgLon = Number(sumLon/dataSize).toFixed(9);
                             var centerPoint = new Point([Number(avgLon),Number(avgLat)]); 
                             var fake_center = new Point(-121.881887,37.336535);
                             map.centerAndZoom(fake_center,6);
@@ -448,7 +448,7 @@
                <input type="text" name="street" id="street" value="" data-mini="true" placeholder="Street">
                <input type="text" name="city" id="city" value="" data-mini="true" placeholder="city">
                <input type="text" name="state" id="state" value="" data-mini="true" placeholder="state">
-               <input type="text" name="zipcode" id="zipcode" value="" data-mini="true" placeholder="zipcode">  
+               <input type="text" name="zipcode" id="zipcode" value="" data-mini="true" placeholder="zipcode (optional)">  
                <div class="ui-btn ui-input-btn ui-shadow">
                   <input type="button" id="search" data-corners="false" data-enhanced="true" value="Search" onclick="window.location='#p2';">Search
                </div>
