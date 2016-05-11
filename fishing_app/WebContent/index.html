@@ -167,6 +167,7 @@
                beforeSend: function() {  $.mobile.loading('show'); $("#overlayblock").show();}, //Show spinner
                complete: function() {  $.mobile.loading('hide'); $("#overlayblock").hide();}, //Hide spinner
                success: function(data) {
+            	   alert(data);
                    require(["esri/map", 
                              "esri/layers/FeatureLayer", 
                              "esri/tasks/query",
@@ -290,7 +291,7 @@
                 beforeSend: function() {  $.mobile.loading('show'); $("#overlayblock").show();}, //Show spinner
                 complete: function() {  $.mobile.loading('hide'); $("#overlayblock").hide();}, //Hide spinner
                 success: function(data) {
-                    alert(data);
+                    //alert(data);
                     require(["esri/map", 
                              "esri/layers/FeatureLayer", 
                              "esri/tasks/query",
@@ -306,8 +307,14 @@
                              "dojo/domReady!"] , function(Map, FeatureLayer, Query, InfoTemplate, InfoWindow, domConstruct, string, Point, Graphic, PictureMarkerSymbol, on, dom) {
                         "use strict" //cannot use undeclared var
                         //create map
+                        var obj = JSON.parse(data);
+                        var fishData = obj.result;
+                        var fishx = Number(Number(fishData[0].centerx).toFixed(4));
+                        var fishx = Number(Number(fishData[0].centery).toFixed(4));
+                        //var fishx = Number(Number(fishData[0].lon).toFixed(4));
+                        //var fishy = Number(Number(fishData[0].lat).toFixed(4));
                         map = new Map("mapDiv", {
-                        center: [-121.881887,37.336535 ],  //SJSU coordinates
+                        center: [-121.881887,37.336535],  //SJSU coordinates
                         zoom: 8,   //zoom to the bay are
                         basemap: "streets", 
                         //the map automatically resizes if the browser window or ContentPane widget enclosing the map is resized.
@@ -320,7 +327,7 @@
                             var sumLat=0,sumLon=0;
                             var dataSize = fishData.length;
                             var pointInfo = new InfoTemplate("Fish Point",
-                            "Release County:${county}<br/>Release Water:${water}<br/>Season:${season}<br/>");
+                            "Release County:${county}<br/>Release Water:${water}<br/>Season:${season}<br/>Species:${species}<br/>");
                             var pointSymbol = new createPictureSymbol("https://raw.githubusercontent.com/Esri/solutions-symbology-data/master/symbology/web/png/Fishing-Site.png",0,12,14,16);          
                             for(var i=0; i<dataSize;i++){
                                 var fishLat = Number(Number(fishData[i].lat).toFixed(4));
@@ -329,7 +336,7 @@
                                 sumLon = sumLon + fishLon;
                                 var fishPoint = new Point([fishLon,fishLat]);
                                 var pointAttr = {"lat":fishPoint.x,"lon":fishPoint.y,"county":fishData[i].County,
-                                                 "water":fishData[i].Water,"season":fishData[i].Season};
+                                                 "water":fishData[i].Water,"season":fishData[i].Season, "species":fishData[i].Species};
                                 var pointGraphic = new Graphic(fishPoint,pointSymbol,pointAttr,pointInfo);
                                 map.graphics.add(pointGraphic);
                                  

@@ -25,9 +25,9 @@ try{
             %>,<%
         }
     %>
-{"County":"<%=rset_oi.getString(1)%>", "Water":"<%=rset_oi.getString(2)%>",
-"Species":"<%=rset_oi.getString(3)%>", "Season":"<%=rset_oi.getString(4)%>",
-"lat":"<%=rset_oi.getString(5)%>", "lon":"<%=rset_oi.getString(6)%>"}
+{"County":"<%=rset_oi.getString(2)%>", "Water":"<%=rset_oi.getString(3)%>",
+"Species":"<%=rset_oi.getString(4)%>", "Season":"<%=rset_oi.getString(5)%>",
+"lat":"<%=rset_oi.getString(6)%>", "lon":"<%=rset_oi.getString(7)%>"}
     <%
     }
     %>]}<%

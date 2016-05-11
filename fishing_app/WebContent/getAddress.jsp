@@ -43,10 +43,13 @@ try{
     
     Double lon = Double.parseDouble(x);
     Double lat = Double.parseDouble(y);
-    Double lonstart = lon - 3;
-    Double lonend = lon + 3;
-    Double latstart = lat - 3;
-    Double latend = lat + 3;
+    
+    // search about 1 degree lon ~ 54 mile
+    // search about 1 degree lat ~ 69 mile
+    Double lonstart = lon - 0.5;
+    Double lonend = lon + 0.5;
+    Double latstart = lat - 0.4;
+    Double latend = lat + 0.4;
   
     Class.forName("com.mysql.jdbc.Driver").newInstance(); 
     conn = DriverManager.getConnection(connectionURL, db_usr, db_psw);
@@ -54,7 +57,7 @@ try{
     String sql_orderinfo = 
         "SELECT * FROM fishingDB.final_with_full_name WHERE (lon between " + 
             lonstart + " and " + lonend + ") and (lat between " + latstart + 
-                " and " + latend + ") limit 10;";
+                " and " + latend + ") order by lon;";
     
     ResultSet rset_oi = states.executeQuery(sql_orderinfo);
     boolean isfirsttime = true;
@@ -66,9 +69,10 @@ try{
             %>,<%
         }
     %>
-{"County":"<%=rset_oi.getString(1)%>", "Water":"<%=rset_oi.getString(2)%>",
-"Species":"<%=rset_oi.getString(3)%>", "Season":"<%=rset_oi.getString(4)%>",
-"lat":"<%=rset_oi.getString(5)%>", "lon":"<%=rset_oi.getString(6)%>"}
+{"County":"<%=rset_oi.getString(2)%>", "Water":"<%=rset_oi.getString(3)%>",
+"Species":"<%=rset_oi.getString(4)%>", "Season":"<%=rset_oi.getString(5)%>",
+"lat":"<%=rset_oi.getString(6)%>", "lon":"<%=rset_oi.getString(7)%>", 
+"centerx":"<%=lon%>", "centery":"<%=lat%>"}
     <%
     }
     %>]}<%
