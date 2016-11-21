@@ -4,7 +4,7 @@
     
 <%
 String db_usr = "root";
-String db_psw = "zsh123456";   
+String db_psw = "123456";   
 String connectionURL = "jdbc:mysql://127.0.0.1:3306";
 Connection conn = null; 
 try{
